@@ -17,10 +17,10 @@ Firstly we'll have a look at Spark's deployment. The question here is: **after a
 ![deploy](../PNGfigures/deploy.png)
 
 We can see from the diagram:
-  - There's Master node and Worker node in the cluster, they are equivalent to Hadoop's Master and Slave node
+  - There's **Master** node and **Worker** node in the cluster, they are equivalent to Hadoop's Master and Slave node
   - Master node has a Master daemon process, managing all worker nodes
   - Worker node has a Worker daemon process, responsible for communicating with the master node and for managing local executors
-  - In the official document, the Driver is explained as "The process running the main() function of the application and creating the SparkContext". The application is the user's program (driver program), such as WordCount.scala. If the driver program is running on the Master node, for example if we run the this on the Master node
+  - In the official document, the Driver is explained as "_`The process running the main() function of the application and creating the SparkContext`_". The application is the user's program (driver program), such as WordCount.scala. If the driver program is running on the Master node, for example if we run the this on the Master node
 
 ```scala
 ./bin/run-example SparkPi 10
@@ -30,21 +30,18 @@ Then the SparkPi program will be the Driver on the Master node. In case of a YAR
 ```scala
 val sc = new SparkContext("spark://master:7077", "AppName")
 ```
-Then the driver program will be on the local machine. However this is not a recommended way of running Spark since the local machine may not be in the same network with the Worker nodes, which will slow down the communication between the driver and the executors
+Then the driver program will be on the local machine. However, this is not a recommended way of running Spark since the local machine may not be in the same network with the Worker nodes, which will slow down the communication between the driver and the executors
 
-  - There may have one or multiple ExecutorBackend processes in each Worker node, each one possesses an Executor instance. Each Executor object maintains a thread pool. Each task runs on a thread.
+  - There may have one or multiple **ExecutorBackend** processes in each Worker node, each one possesses an Executor instance. Each Executor object maintains a thread pool. Each task runs on a thread.
   - Each application has one driver and multiple executors. All tasks within the same executor belongs to the same application
-  - In Standalone deployment mode, ExecutorBackend is instantiated as CoarseGrainedExecutorBackend
+  - In Standalone deployment mode, **ExecutorBackend** is instantiated as **CoarseGrainedExecutorBackend**
 
-    > In my cluster there's only one CoarseGrainedExecutorBackend process on each worker and I didn't manage to configure multiple instances of it (my guess is that there'll be multiple CoarseGrainedExecutorBackend process when when multiple applications are running, need to be confirmed).
-    > Check this blog (in Chinese) [Summary on Spark Executor Driver Resource Scheduling](http://blog.csdn.net/oopsoom/article/details/38763985) by [@OopsOutOfMemory](http://weibo.com/oopsoom) if you want to know more about the relation between Worker and Executor.
-
-  - Worker controls the CoarseGrainedExecutorBackend by using a ExecutorRunner
+  - Worker controls the **CoarseGrainedExecutorBackend** by using a **ExecutorRunner**
 
 After the deployment diagram, we'll examine an example job to see how a Spark job is created and executed.
 
-## Example Spark Job
-The example here is the GroupByTest application under the examples package in Spark. We assume that the application is run on the Master node, with the following command:
+### Example Spark Job
+The example here is the **GroupByTest** application under the examples package in Spark. We assume that the application is run on the Master node, with the following command:
 
 ```scala
 /* Usage: GroupByTest [numMappers] [numKVPairs] [valSize] [numReducers] */
@@ -52,9 +49,10 @@ The example here is the GroupByTest application under the examples package in Sp
 bin/run-example GroupByTest 100 10000 1000 36
 ```
 
-The code of this application is the following:
+The code of this application is the following: _( step by step explanation below )_
 
-```scala
+
+```scala title=Scala
 package org.apache.spark.examples
 
 import java.util.Random
@@ -68,13 +66,14 @@ import org.apache.spark.SparkContext._
 object GroupByTest {
   def main(args: Array[String]) {
     val sparkConf = new SparkConf().setAppName("GroupBy Test")
-    var numMappers = 100
-    var numKVPairs = 10000
-    var valSize = 1000
+    var numMappers = 100 // total number of mappers
+    var numKVPairs = 10000 // number of key value pairs per mapper
+    var valSize = 1000 // array size
     var numReducers = 36
 
     val sc = new SparkContext(sparkConf)
 
+    // creating a rdd with numMappers partitions ( each partition has one value )
     val pairs1 = sc.parallelize(0 until numMappers, numMappers).flatMap { p =>
       val ranGen = new Random
       var arr1 = new Array[(Int, Array[Byte])](numKVPairs)
@@ -103,7 +102,7 @@ This is not a complicated application, let's estimate the data size and the resu
 
   1. Initialize SparkConf
   2. Initialize numMappers=100, numKVPairs=10,000, valSize=1000, numReducers= 36
-  3. Initialize SparkContext. This is an important step, the SparkContext contains objectes and actors that are needed for the creation of a driver
+     3. Initialize SparkContext. This is an important step, the SparkContext contains objects and actors that are needed for the creation of a driver
   4. For each mapper, a `arr1: Array[(Int, Byte[])]` is created, with a length of numKVPairs. Each byte array's size is valSize, a randomly generated integer. We may estimate `Size(arr1) = numKVPairs * (4 + valSize) = 10MB`, and we have `Size(pairs1) = numMappers * Size(arr1) ＝1000MB`
   5. Each mapper is instructed to cache its `arr1` array into the memory
   6. Then an action, count(), is applied to compute the size of `arr1` for all mappers, the result is `numMappers * numKVPairs = 1,000,000`. This action triggers the caching of `arr1`s
@@ -127,7 +126,9 @@ A call of function `RDD.toDebugString` will return the logical plan:
 We can also draw a diagram:
 ![deploy](../PNGfigures/JobRDD.png)
 
-> Notice that the `data in the partition` blocks shows the final result of the partitions, this does not necessarily mean that all these data resides in the memory in the same time
+:::tip
+Notice that the `data in the partition` blocks shows the final result of the partitions, this does not necessarily mean that all these data resides in the memory in the same time
+:::
 
 So we could conclude:
   - User initiated an array from 0 to 99: `0 until numMappers`
@@ -141,8 +142,9 @@ So we could conclude:
   - Each value in MapPartitionRDD (`Array[Byte]`) is converted to `Iterable`
   - The last count() action is executed in the same way as we explained above
 
-**We can see that the logical plan describes the data flow of the application: the transformations that are applied to the data, the intermediate RDDs and the dependency between these RDDs.**
-
+:::info
+We can see that the **logical plan** describes the data flow of the application: the transformations that are applied to the data, the intermediate RDDs and the dependency between these RDDs.
+:::
 ## Physical Plan
 
 As we've found out, the logical plan is about the dependency of data, not the actual execution of tasks. This is a main difference compared to Hadoop. In Hadoop, user handles directly the physical tasks: mapper tasks for applying operations on partitions and reducers tasks for aggregation. This is because in Hadoop, the data flow is pre-defined and fixed, user just fills in the map() and reduce() function. While in Spark, the data flow is very flexible and could be complicated, so it's difficult to simply combine together the concept of  data dependency and the physical tasks. For this reason, Spark separates the data flow and the actual task execution process, and has algorithms to transform a logical plan into a physical plan. We'll discuss this transformation in later chapter.
@@ -167,7 +169,9 @@ The second job is triggered by `pairs1.groupByKey(numReducers).count`:
   - After the tasks' execution, drive collects the results of tasks and sum them up
   - Job 1 completes
 
+:::tip
 We can see that the physical plan is not simple. An Spark application can contain multiple jobs, each job could have multiple stages, and each stage has multiple tasks. **Later we'll see how the jobs are defined as well as how the stages and tasks are created**
+:::
 
 ## Discussion
 So now we have a basic knowledge about a Spark job's creation and execution. We also discussed the cache feature of Spark.

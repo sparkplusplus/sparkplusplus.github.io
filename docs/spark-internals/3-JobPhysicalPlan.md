@@ -1,7 +1,7 @@
 ---
-title: "Job Physical Plan"
+title: "Spark Physical Plan"
 sidebar_position: 4
-id: job_physical_plan
+id: spark_physical_plan
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
   - overview

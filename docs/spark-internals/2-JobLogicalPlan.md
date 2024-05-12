@@ -1,16 +1,14 @@
 ---
-title: "Job Logical Plan"
+title: "Spark Logical Plan"
 sidebar_position: 3
-id: job_logical_plan
+id: spark_logical_plan
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
   - overview
   - spark-internals
 ---
 
-# Job Logical Plan
-
-## An example of general logical plan
+### An example of general logical plan
 ![deploy](../PNGfigures/GeneralLogicalPlan.png)
 
 The picture above illustrates a general job logical plan which takes 4 steps to get the final result:
