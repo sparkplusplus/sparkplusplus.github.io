@@ -108,7 +108,7 @@ const config = {
       {
         redirects: [
           {
-            to: "/getting-started",
+            to: "/",
             from: "/developer/videos/",
           },
         ],
