@@ -1,6 +1,6 @@
 ---
-title: Architecture
-id: architecture
+title: Spark Internals
+id: spark-internals
 description: Describing the architecture of Prophecy and how it can integrate into your use cases
 tags: []
 ---

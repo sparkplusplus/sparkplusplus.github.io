@@ -1,6 +1,6 @@
 ---
 title: "Architecture"
-sidebar_position: 6
+sidebar_position: 5
 id: architecture
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
@@ -8,18 +8,17 @@ tags:
   - spark-internals
 ---
 
-#	Architecture
-
 We talked about spark jobs in chapter 3. In this chapter, we will talk about the architecture and how master, worker, driver and executors are coordinated to finish a job.
 
-> Feel free to skip code if you prefer diagrams.
-
+:::tip
+Feel free to **skip** code if you prefer diagrams.
+:::
 
 ## Deployment diagram
 
 We have seen the following diagram in `overview` chapter.
 
-![deploy](../PNGfigures/deploy.png)
+![deploy](/PNGfigures/deploy.png)
 
 Next, we will talk about some details about it.
 
@@ -27,7 +26,7 @@ Next, we will talk about some details about it.
 
 The diagram below illustrates how driver program (on master node) produces job, and then submits it to worker nodes.
 
-![JobSubmission](../PNGfigures/JobSubmission.png)
+![JobSubmission](/PNGfigures/JobSubmission.png)
 
 Driver side behavior is equivalent to the code below:
 
@@ -103,7 +102,7 @@ coarseGrainedExecutorBackend ! LaunchTask(serializedTask)
  
 The diagram below shows the execution of a task received by worker node and how driver processes task results.
 
-![TaskExecution](../PNGfigures/taskexecution.png)
+![TaskExecution](/PNGfigures/taskexecution.png)
 
 After receiving a serialized task, the executor deserializes it into a normal task, and then runs the task to get `directResult` which will be sent back to driver. It is noteworthy that data package sent from `Actor` can not be too big:
 
@@ -191,7 +190,7 @@ In the preceding paragraph, we talked about task execution and result processing
 
 **How does reducer know where to fetch data ?**
 
-![readMapStatus](../PNGfigures/readMapStatus.png)
+![readMapStatus](/PNGfigures/readMapStatus.png)
 
 Reducer needs to know on which node the `FileSegments` produced by `ShuffleMapTask` of parent stage are. **This kind of information is sent to driver’s `mapOutputTrackerMaster` when `ShuffleMapTask` is finished. The information is also stored in `mapStatuses: HashMap[stageId, Array[MapStatus]]`**. Given `stageId`, we can get`Array[MapStatus]` which contains information about `FileSegments` produced by `ShuffleMapTasks`. `Array(taskId)` contains the location(`blockManagerId`) and the size of each `FileSegment`.
 
@@ -209,7 +208,7 @@ rdd.iterator()
 => itr = basicBlockFetcherIterator.flatMap(unpackBlock)
 ```
 
-![blocksByAddress](../PNGfigures/blocksByAddress.png)
+![blocksByAddress](/PNGfigures/blocksByAddress.png)
 
 After `basicBlockFetcherIterator` has received the task of data retrieving, it produces several `fetchRequest`s. **Each of them contains the tasks to fetch `FileSegment`s from several nodes. **According to the diagram above, we know that `reducer-2` needs to fetch `FileSegment`(FS)(in white) from 3 worker nodes. The global data fetching task can be represented by `blockByAddress`: 4 blocks from node 1, 3 blocks from node 2, and 4 blocks from node 3
 
@@ -239,7 +238,7 @@ Some more details:
 
 **How does the reducer send `fetchRequest` to the target node? How does the target node process `fetchRequest`, read and send back `FileSegment` to reducer?**
 
-![fetchrequest](../PNGfigures/fetchrequest.png)
+![fetchrequest](/PNGfigures/fetchrequest.png)
 
 When `RDD.iterator()` meets `ShuffleDependency`, `BasicBlockFetcherIterator` will be called to fetch `FileSegment`s. `BasicBlockFetcherIterator` uses `connectionManager` of `blockManger` to send `fetchRequest` to `connectionManager`s on the other nodes. NIO is used for communication between `connectionManager`s. On the other nodes, for example, after `connectionManager` on worker node 2 receives a message, it will forward the message to `blockManager`. The latter uses `diskStore` to read `FileSegment`s requested by `fetchRequest` locally, they will still be sent back by `connectionManager`. If `FileConsolidation` is activated, `diskStore` needs the location of `blockId` given by `shuffleBolockManager`. If `FileSegment` is no more than `spark.storage.memoryMapThreshold = 8KB`, then diskStore will put `FileSegment` into memory when reading it, otherwise, The memory mapping method in `FileChannel` of `RandomAccessFile` will be used to read `FileSegment`, thus large `FileSegment` can be loaded into memory.
 

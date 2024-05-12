@@ -1,7 +1,7 @@
 ---
 title: "Spark Logical Plan"
-sidebar_position: 3
-id: spark_logical_plan
+sidebar_position: 2
+id: spark-logical-plan
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
   - overview
@@ -9,7 +9,7 @@ tags:
 ---
 
 ### An example of general logical plan
-![deploy](../PNGfigures/GeneralLogicalPlan.png)
+![deploy](/PNGfigures/GeneralLogicalPlan.png)
 
 The picture above illustrates a general job logical plan which takes 4 steps to get the final result:
 
@@ -97,7 +97,7 @@ Note that:
 
 The two dependencies are illustrated in the following picture.
 
-![Dependency](../PNGfigures/Dependency.png)
+![Dependency](/PNGfigures/Dependency.png)
 
 According to the definition, the two on the first row are `NarrowDependency` and the last one is `ShuffleDependency`.
 
@@ -121,7 +121,7 @@ An `OneToOneDependency` case is shown in the picture below. Although it is a 1 t
 
 The difference between the two patterns on the right side is similar to the following code snippets.
 
-![Dependency](../PNGfigures/OneToOneDependency.png)
+![Dependency](/PNGfigures/OneToOneDependency.png)
 
 code1 of iter.f()
 ```java
@@ -139,13 +139,13 @@ f(array)
 
 **1) union(otherRDD)**
 
-![union](../PNGfigures/union.png)
+![union](/PNGfigures/union.png)
 
 `union()` simply combines two RDDs together. It never changes  data of a partition. `RangeDependency`(1:1) retains the borders of original RDDs in order to make it easy to revisit the partitions from RDD produced by `union()`
 
 **2) groupByKey(numPartitions)** [changed in 1.3]
 
-![groupByKey](../PNGfigures/groupByKey.png)
+![groupByKey](/PNGfigures/groupByKey.png)
 
 We have talked about `groupByKey`'s dependency before, now we make it more clear.
 
@@ -157,19 +157,19 @@ We have talked about `groupByKey`'s dependency before, now we make it more clear
 
 **2) reduceyByKey(func, numPartitions)** [changed in 1.3]
 
-![reduceyByKey](../PNGfigures/reduceByKey.png)
+![reduceyByKey](/PNGfigures/reduceByKey.png)
 
 `reduceByKey()` is similar to `MapReduce`. The data flow is equivalent. `redcuceByKey` enables map side combine by default, which is carried out by `mapPartitions` before shuffle and results in `MapPartitionsRDD`. After shuffle, `aggregate + mapPartitions` is applied to `ShuffledRDD`. Again, we get a `MapPartitionsRDD`
 
 **3) distinct(numPartitions)**
 
-![distinct](../PNGfigures/distinct.png)
+![distinct](/PNGfigures/distinct.png)
 
 `distinct()` aims to deduplicate RDD records. Since duplicated records can be found in different partitions, shuffle is needed to deduplicate records by using `aggregate()`. However, shuffle need `RDD[(K, V)]`. If the original records have only keys, e.g. `RDD[Int]`, then it should be completed as `<K, null>` by `map()` (`MappedRDD`). After that, `reduceByKey()` is used to do some shuffle (mapSideCombine->reduce->MapPartitionsRDD). Finally, only key is taken from <K, null> by `map()`(`MappedRDD`). `ReduceByKey()` RDDs are colored in blue
 
 **4) cogroup(otherRDD, numPartitions)**
 
-![cogroup](../PNGfigures/cogroup.png)
+![cogroup](/PNGfigures/cogroup.png)
 
 Different from `groupByKey()`, `cogroup()` aggregates 2 or more RDDs. **What's the relationship between GoGroupedRDD and (RDD a, RDD b)? ShuffleDependency or OneToOneDependency？**
 
@@ -204,13 +204,13 @@ Finally, it returns `deps: Array[Dependency]` which is an array of `Dependency` 
 
 **5) intersection(otherRDD)**
 
-![intersection](../PNGfigures/intersection.png)
+![intersection](/PNGfigures/intersection.png)
 
 `intersection()` aims to extract all the common elements from  `RDD a and b`. `RDD[T]` is mapped into `RDD[(T, null)]`, where `T` can not be any collections, then `a.cogroup(b)` (colored in blue). `filter()` only keeps records where neither of `[iter(groupA()), iter(groupB())]` is empty (`FilteredRDD`). Finally, only `keys()` are kept (`MappedRDD`)
 
 6) **join(otherRDD, numPartitions)**
 
-![join](../PNGfigures/join.png)
+![join](/PNGfigures/join.png)
 
 `join()` takes two `RDD[(K, V)]`, like `join` in SQL. Similar to `intersection()`, it does `cogroup()` first and results in a `MappedValuesRDD` whose type is `RDD[(K, (Iterable[V1], Iterable[V2]))]`, then compute the Cartesian product between the two `Iterable`, finally `flatMap()` is called.
 
@@ -218,7 +218,7 @@ Here are two examples, in the first one, `RDD 1` and `RDD 2` use `RangePartition
 
 **7) sortByKey(ascending, numPartitions)**
 
-![sortByKey](../PNGfigures/sortByKey.png)
+![sortByKey](/PNGfigures/sortByKey.png)
 
 `sortByKey()` sorts records of `RDD[(K, V)]` by key. `ascending` is a self-explanatory boolean flag. It produces a `ShuffledRDD` which takes a `rangePartitioner`. The partitioner decides the border of each partition, e.g. the first partition takes records with keys from `char A` to `char B`, and the second takes those from `char C` to `char D`. Inside each partition, records are sorted by key. Finally, the records in `MapPartitionsRDD` are in order.
 
@@ -226,7 +226,7 @@ Here are two examples, in the first one, `RDD 1` and `RDD 2` use `RangePartition
 
 **8) cartesian(otherRDD)**
 
-![cartesian](../PNGfigures/Cartesian.png)
+![cartesian](/PNGfigures/Cartesian.png)
 
 `Cartesian()` returns a Cartesian product of 2 `RDD`s. The resulting `RDD` has `#partition(RDD a) x #partition(RDD b)` partitions.
 
@@ -238,7 +238,7 @@ Need to pay attention to the dependency, each partition in `CartesianRDD` depend
 
 **9) coalesce(numPartitions, shuffle = false)**
 
-![Coalesce](../PNGfigures/Coalesce.png)
+![Coalesce](/PNGfigures/Coalesce.png)
 
 `coalesce()` can reorganize partitions, e.g. decrease # of partitions from 5 to 3, or increase from 5 to 10. Need to notice that when `shuffle = false`, we can not increase partitions, because that will force a shuffle while we don't want shuffle, which is nonsense.
 

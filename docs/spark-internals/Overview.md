@@ -1,20 +1,21 @@
 ---
 title: "Overview"
-sidebar_position: 2
-id: Overview
+sidebar_position: 1
+id: overview
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
   - overview
   - spark-internals
 ---
 
+Firstly we'll have a look at Spark's deployment. 
 
-## Overview
-
-Firstly we'll have a look at Spark's deployment. The question here is: **after a successful deployment, what are the services launched by each node of the cluster?**
+:::tip
+The question here is: **After a successful deployment, what are the services launched by each node of the cluster?**
+:::
 
 ## Deployment Diagram
-![deploy](../PNGfigures/deploy.png)
+![deploy](/PNGfigures/deploy.png)
 
 We can see from the diagram:
   - There's **Master** node and **Worker** node in the cluster, they are equivalent to Hadoop's Master and Slave node
@@ -96,7 +97,7 @@ object GroupByTest {
 ```
 
 After reading the code, we should have an idea about how the data get transformed:
-![deploy](../PNGfigures/UserView.png)
+![deploy](/PNGfigures/UserView.png)
 
 This is not a complicated application, let's estimate the data size and the result:
 
@@ -124,7 +125,7 @@ A call of function `RDD.toDebugString` will return the logical plan:
 ```
 
 We can also draw a diagram:
-![deploy](../PNGfigures/JobRDD.png)
+![deploy](/PNGfigures/JobRDD.png)
 
 :::tip
 Notice that the `data in the partition` blocks shows the final result of the partitions, this does not necessarily mean that all these data resides in the memory in the same time
@@ -150,7 +151,7 @@ We can see that the **logical plan** describes the data flow of the application:
 As we've found out, the logical plan is about the dependency of data, not the actual execution of tasks. This is a main difference compared to Hadoop. In Hadoop, user handles directly the physical tasks: mapper tasks for applying operations on partitions and reducers tasks for aggregation. This is because in Hadoop, the data flow is pre-defined and fixed, user just fills in the map() and reduce() function. While in Spark, the data flow is very flexible and could be complicated, so it's difficult to simply combine together the concept of  data dependency and the physical tasks. For this reason, Spark separates the data flow and the actual task execution process, and has algorithms to transform a logical plan into a physical plan. We'll discuss this transformation in later chapter.
 
 For the example job, let's draw its physical DAG:
-![deploy](../PNGfigures/PhysicalView.png)
+![deploy](/PNGfigures/PhysicalView.png)
 
 We can see that the GroupByTest application generates 2 jobs, the first job is triggered by the first action (that is `pairs1.count()`). Let's check this first job:
 

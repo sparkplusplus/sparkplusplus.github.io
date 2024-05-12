@@ -1,14 +1,12 @@
 ---
 title: "Cache And Checkpoint"
 sidebar_position: 6
-id: cache_and_checkpoint
+id: cache-and-checkpoint
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
   - overview
   - spark-internals
 ---
-
-# cache and checkpoint
 
 `cache` (or `persist`) is an important feature which does not exist in Hadoop. It makes Spark much faster to reuse a data set, e.g. iterative algorithm in machine learning, interactive data exploration, etc. Different from Hadoop MapReduce jobs, Spark's logical/physical plan can be very large, so the computing chain could be too long that it takes lots of time to compute RDD. If, unfortunately, some errors or exceptions occur during the execution of a task, the whole computing chain needs to be re-executed, which is considerably expensive. Therefore, we need to `checkpoint` some time-consuming RDDs. Thus, even if the following RDD goes wrong, it can continue with the data retrieved from checkpointed RDDs.
 
@@ -17,9 +15,9 @@ tags:
 Let's take the `GroupByTest` in chapter Overview as an example, the `FlatMappedRDD` has been cached, so job 1 can just start with `FlatMappedRDD`, since `cache()` makes the repeated data get shared by jobs of the same application.
 
 Logical plan：
-![deploy](../PNGfigures/JobRDD.png)
+![deploy](/PNGfigures/JobRDD.png)
 Physical plan：
-![deploy](../PNGfigures/PhysicalView.png)
+![deploy](/PNGfigures/PhysicalView.png)
 
 **Q: What kind of RDD needs to be cached ?**
 
@@ -37,7 +35,7 @@ We can just make a guess. Intuitively, when a task gets the first record of an R
 
 After calling `rdd.cache()`, `rdd` becomes `persistRDD` whose `storageLevel` is `MEMORY_ONLY`. `persistRDD` will tell `driver` that it needs to be persisted.
 
-![cache](../PNGfigures/cache.png)
+![cache](/PNGfigures/cache.png)
 
 The above can be found in the following source code
 ```scala
@@ -61,7 +59,7 @@ When `rdd.iterator()` is called to compute some partitions in the `rdd`, a `bloc
 
 When a cached RDD is being recomputed (in next job), `task` will read `blockManager` directly from `memoryStore`. Specifically, during the computation of some RDD partitions (by calling `rdd.iterator()`), `blockManager` will be asked whether they are cached or not. If the partition is cached in local, `blockManager.getLocal()` will be called to read data from `memoryStore`. If the partition was cached on the other nodes, `blockManager.getRemote()` will be called. See below:
 
-![cacheRead](../PNGfigures/cacheRead.png)
+![cacheRead](/PNGfigures/cacheRead.png)
 
 **the storage location of cached partition:** the `blockManager` of the node on which a partition is cached will notify the `blockManagerMasterActor` on master by saying that an RDD partition is cached. This information will be stored in the `blockLocations: HashMap` of `blockMangerMasterActor`. When a task needs a cached RDD, it will send `blockManagerMaster.getLocations(blockId)` request to driver to get the partition's location, and the driver will lookup `blockLocations` to send back location info.
 

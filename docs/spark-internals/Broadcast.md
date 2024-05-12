@@ -1,14 +1,12 @@
 ---
 title: "Broadcast"
-sidebar_position: 6
+sidebar_position: 7
 id: broadcast
 description: Prophecy deployment is flexible and supports multiple mechanisms
 tags:
   - overview
   - spark-internals
 ---
-
-## Broadcast
 
 As its name implies, broadcast means sending data from one node to all other nodes in the cluster. It's useful in many situations, for example we have a table in the driver, and other nodes need it as a lookup table. With broadcast we can send this table to all nodes and tasks will be able to do local lookups. Actually, it is challenging to implement a broadcast mechanism that is reliable and efficient. Spark's documentation says:
 
@@ -70,7 +68,7 @@ Unlike the data transfer in `HttpBroadcast`, `TorrentBroadcast` uses `blockManag
 
 Let's see some details in `TorrentBroadcast`:
 
-![TorrentBroadcast](../PNGfigures/TorrentBroadcast.png)
+![TorrentBroadcast](/PNGfigures/TorrentBroadcast.png)
 
 #### Driver
 
