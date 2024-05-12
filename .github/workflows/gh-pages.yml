@@ -5,8 +5,13 @@ on:
     branches:
       - main
 
+permissions: write-all
+
 jobs:
   deploy:
+    permissions:
+      contents: read
+      pages: write          # <-- Add this line
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     steps:

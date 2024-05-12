@@ -4,8 +4,6 @@ on:
   pull_request:
     branches: [main]
 
-permissions: write-all
-
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
