@@ -10,8 +10,7 @@ permissions: write-all
 jobs:
   deploy:
     permissions:
-      contents: read
-      pages: write          # <-- Add this line
+      contents: write
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     steps:
