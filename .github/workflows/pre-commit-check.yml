@@ -4,11 +4,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions: write-all
+
 jobs:
   pre-commit:
-    permissions:
-      contents: read
-      pages: write          # <-- Add this line
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
