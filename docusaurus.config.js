@@ -91,9 +91,9 @@ const config = {
         darkTheme: darkCodeTheme,
         additionalLanguages: ["java", "scala", "groovy"],
       },
-      algolia: { // TODO: find our own
-        appId: "ZWUSSL",
-        apiKey: "9adffd285b540ddd192d384f4",
+      algolia: {
+        appId: "0V0Y703E07",
+        apiKey: "686988452c430723cab26a560ddc0fcd",
         indexName: "sparkplusplus",
         contextualSearch: true,
         // externalUrlRegex: 'external\\.com|domain\\.com',
