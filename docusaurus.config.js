@@ -94,7 +94,7 @@ const config = {
       algolia: {
         appId: "P8WC4Z2QXP",
         apiKey: "be89215a21cc08538ff590212f99703f", // okay to publish this as this is PUBLIC SEARCH KEY
-        indexName: "sparkplusplus",
+        indexName: "sparkplusplusio",
         contextualSearch: true,
         // externalUrlRegex: 'external\\.com|domain\\.com',
         searchParameters: {},
