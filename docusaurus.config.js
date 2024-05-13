@@ -92,8 +92,8 @@ const config = {
         additionalLanguages: ["java", "scala", "groovy"],
       },
       algolia: {
-        appId: "0V0Y703E07",
-        apiKey: "686988452c430723cab26a560ddc0fcd",
+        appId: "P8WC4Z2QXP",
+        apiKey: "be89215a21cc08538ff590212f99703f", // okay to publish this as this is PUBLIC SEARCH KEY
         indexName: "sparkplusplus",
         contextualSearch: true,
         // externalUrlRegex: 'external\\.com|domain\\.com',
