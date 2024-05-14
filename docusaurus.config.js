@@ -87,7 +87,7 @@ const config = {
                         ],
                     },
                 ],
-                copyright: `© 2024 SparkPlusPlus Inc All Rights Reserved target="_blank">Privacy Policy</a>`,
+                // copyright: `©SparkPlusPlus`,
             },
             prism: {
                 theme: lightCodeTheme,
