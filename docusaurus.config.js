@@ -35,6 +35,7 @@ const config = {
                 docs: {
                     routeBasePath: "/",
                     sidebarPath: require.resolve("./sidebars.js"),
+                    editUrl: 'https://github.com/sparkplusplus/sparkplusplus.github.io/edit/main/',
                 },
                 blog: false,
                 theme: {
