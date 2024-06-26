@@ -97,12 +97,12 @@ const config = {
             },
             algolia: {
                 appId: "P8WC4Z2QXP",
-                apiKey: "be89215a21cc08538ff590212f99703f", // okay to publish this as this is PUBLIC SEARCH KEY
+                apiKey: "9d382f5c18d03fa2c2052b38cc325e16", // okay to publish this as this is PUBLIC SEARCH KEY
                 indexName: "sparkplusplusio",
                 contextualSearch: true,
                 // externalUrlRegex: 'external\\.com|domain\\.com',
-                searchParameters: {},
-                searchPagePath: "search",
+                // searchParameters: {},
+                // searchPagePath: "search",
             },
         }),
 
