@@ -99,9 +99,9 @@ const config = {
                 appId: "P8WC4Z2QXP",
                 apiKey: "9d382f5c18d03fa2c2052b38cc325e16", // okay to publish this as this is PUBLIC SEARCH KEY
                 indexName: "sparkplusplusio",
-                contextualSearch: true,
+                contextualSearch: false,
                 // externalUrlRegex: 'external\\.com|domain\\.com',
-                // searchParameters: {},
+                searchParameters: {}, // keep this empty to solve issue with facet filters
                 // searchPagePath: "search",
             },
         }),
