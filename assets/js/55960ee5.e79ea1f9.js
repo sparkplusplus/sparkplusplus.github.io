@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs_4=self.webpackChunkdocs_4||[]).push([[121],{8070:e=>{e.exports=JSON.parse('[{"label":"overview","permalink":"/tags/overview","count":7},{"label":"spark-internals","permalink":"/tags/spark-internals","count":7}]')}}]);
