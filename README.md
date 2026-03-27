@@ -62,7 +62,7 @@ The last one is being used to set a standard for how things should be spelled, c
 
 ### Installing pre-commit
 
-Run this command once:
+Run this command at once:
 
 ```shell
 $ pip install pre-commit && pre-commit install
