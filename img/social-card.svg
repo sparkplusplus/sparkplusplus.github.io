@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="SparkPlusPlus social card">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1b2a"/>
+      <stop offset="100%" stop-color="#12324b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffbf69"/>
+      <stop offset="100%" stop-color="#c96d28"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="975" cy="140" r="30" fill="#ff7b54"/>
+  <path d="M210 420c68-120 119-193 191-303 12-18 38-18 49 0l56 87 60-87c12-18 37-18 49 0 63 97 119 183 183 303H680l-90-145-82 122h64v52H434v-52h59l-84-122-90 145Z" fill="url(#accent)"/>
+  <text x="140" y="135" fill="#ffbf69" font-family="Avenir Next, Segoe UI, sans-serif" font-size="32" letter-spacing="8">SPARK FRAMEWORK</text>
+  <text x="140" y="220" fill="#fff8ef" font-family="Avenir Next, Segoe UI, sans-serif" font-size="92" font-weight="700">SparkPlusPlus</text>
+  <text x="140" y="292" fill="#d8dfeb" font-family="Avenir Next, Segoe UI, sans-serif" font-size="34">Typed config, structured runtime, cleaner Spark applications.</text>
+</svg>
