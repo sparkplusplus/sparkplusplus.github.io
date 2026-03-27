@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="SparkPlusPlus logo">
+  <defs>
+    <linearGradient id="sparkplus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffbf69" />
+      <stop offset="100%" stop-color="#c96d28" />
+    </linearGradient>
+  </defs>
+  <rect width="220" height="220" rx="48" fill="#13293d" />
+  <path d="M63 145c16-28 28-45 45-71 3-5 11-5 14 0l13 21 14-21c3-5 11-5 14 0 15 23 28 43 43 71h-28l-22-36-20 29h16v22h-35v-22h15l-18-29-22 36Z" fill="url(#sparkplus-gradient)" />
+  <circle cx="162" cy="63" r="10" fill="#ff7b54" />
+</svg>

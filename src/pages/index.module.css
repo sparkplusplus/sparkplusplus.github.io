@@ -1,0 +1,70 @@
+.heroBanner {
+  background:
+    radial-gradient(circle at top left, rgba(255, 178, 87, 0.35), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(22, 137, 173, 0.18), transparent 30%),
+    linear-gradient(135deg, #0d1b2a 0%, #13293d 48%, #12324b 100%);
+  color: #f7f3eb;
+  padding: 7rem 0 6rem;
+}
+
+.kicker {
+  color: #ffbf69;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+  max-width: 12ch;
+}
+
+.heroSubtitle {
+  color: rgba(247, 243, 235, 0.88);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 42rem;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.mainSection {
+  background: linear-gradient(180deg, #fffaf3 0%, #f5f0e8 100%);
+  padding: 4rem 0 5rem;
+}
+
+.featureCard {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(19, 50, 75, 0.08);
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 60px rgba(17, 24, 39, 0.08);
+  padding: 2rem;
+}
+
+.featureCard h3 {
+  color: #13293d;
+}
+
+.featureCard p {
+  color: #44576a;
+  margin-bottom: 0;
+}
+
+@media (max-width: 996px) {
+  .heroBanner {
+    padding: 5rem 0 4rem;
+  }
+
+  .featureCard {
+    margin-bottom: 1rem;
+  }
+}
