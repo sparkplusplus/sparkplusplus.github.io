@@ -5,6 +5,7 @@ This repository contains the Docusaurus source for the public SparkPlusPlus docu
 ## Local Development
 
 ```bash
+node -v # use Node 18+
 npm install
 npm run dev
 ```
@@ -18,6 +19,7 @@ If file changes are not being detected on your machine, use polling mode:
 ## Production Build
 
 ```bash
+node -v # use Node 18+
 npm run build
 ```
 
